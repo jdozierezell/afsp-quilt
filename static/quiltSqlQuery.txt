@@ -1,0 +1,91 @@
+SELECT * FROM wp_posts WHERE post_type = 'quilt_square' 
+
+SELECT * FROM wp_posts INNER JOIN wp_postmeta ON wp_posts.ID = wp_postmeta.post_id WHERE post_type = 'quilt_square' 
+
+SELECT ID, post_title, meta_value FROM wp_posts INNER JOIN wp_postmeta ON wp_posts.ID = wp_postmeta.post_id WHERE post_type = 'quilt_square' AND meta_key = 'q_square'
+
+SELECT ID, post_title, meta_value, guid FROM wp_posts INNER JOIN wp_postmeta ON wp_posts.ID = wp_postmeta.post_id WHERE (post_type = 'quilt_square' AND meta_key = 'q_square') OR (post_type = 'attachment' AND post_id = post_parent)
+
+SELECT ID, post_title, meta_value, guid, post_date FROM wp_posts INNER JOIN wp_postmeta ON wp_posts.ID = wp_postmeta.post_id WHERE (post_type = 'quilt_square' AND meta_key = 'q_square' AND post_date > '2019-08-13') OR (post_type = 'attachment' AND meta_key = meta_value)
+
+SELECT ID, post_title AS title, meta_key, meta_value, guid, post_date FROM wp_posts AS quilt_posts INNER JOIN wp_postmeta AS quilt_meta ON quilt_posts.ID = quilt_meta.post_id WHERE (quilt_posts.post_type = 'quilt_square' AND quilt_meta.meta_key = 'q_square' AND quilt_posts.post_date > '2019-08-13')
+
+SELECT quilt_posts.ID as quilt_ID, quilt_posts.post_title AS quilt_title, quilt_meta.meta_key AS quilt_meta_key, quilt_meta.meta_value as quilt_meta_value, quilt_posts.guid as quilt_guid, quilt_posts.post_date as quilt_post_date FROM wp_posts AS quilt_posts INNER JOIN wp_postmeta AS quilt_meta ON quilt_posts.ID = quilt_meta.post_id WHERE (quilt_posts.post_type = 'quilt_square' AND quilt_meta.meta_key = 'q_square' AND quilt_posts.post_date > '2019-08-13')
+
+SELECT q_posts.ID as q_ID, q_posts.post_title AS q_title, q_meta.meta_key AS q_meta_key, q_meta.meta_value as q_meta_value, q_posts.guid as q_guid, q_posts.post_date as q_post_date FROM wp_posts AS q_posts INNER JOIN wp_postmeta AS q_meta ON ID = q_meta.post_id INNER JOIN wp_postmeta AS image_meta WHERE (q_posts.post_type = 'quilt_square' AND q_meta.meta_key = 'q_square' AND q_posts.post_date > '2019-08-13')
+
+SELECT q_posts.ID as q_ID, q_posts.post_title AS q_title, q_meta.meta_key AS q_meta_key, q_meta.meta_value as q_meta_value, q_posts.guid as q_guid, q_posts.post_date as q_post_date, i_posts.guid AS i_guid FROM wp_posts AS q_posts INNER JOIN wp_postmeta AS q_meta ON ID = q_meta.post_id INNER JOIN wp_posts AS i_posts WHERE (q_posts.post_type = 'quilt_square' AND q_meta.meta_key = 'q_square' AND q_posts.post_date > '2019-08-13') ORDER BY `q_title` ASC 
+
+SELECT q_posts.ID as q_ID, q_posts.post_title AS q_title, q_meta.meta_key AS q_meta_key, q_meta.meta_value as q_meta_value, q_posts.guid as q_guid, q_posts.post_date as q_post_date, i_posts.guid AS i_guid FROM wp_posts AS q_posts INNER JOIN wp_postmeta AS q_meta ON ID = q_meta.post_id INNER JOIN wp_posts AS i_posts WHERE (q_posts.post_type = 'quilt_square' AND q_meta.meta_key = 'q_square' AND q_posts.post_date > '2019-08-13') AND i_posts.ID = q_meta.meta_value
+
+SELECT q_posts.ID as q_ID, q_posts.post_title AS q_title, q_meta.meta_key AS q_meta_key, q_meta.meta_value as q_meta_value, q_posts.guid as q_guid, q_posts.post_date as q_post_date, i_posts.guid AS i_guid, d_meta.meta_value AS d_meta_value FROM wp_posts AS q_posts INNER JOIN wp_postmeta AS q_meta ON ID = q_meta.post_id INNER JOIN wp_posts AS i_posts INNER JOIN wp_postmeta AS d_meta WHERE (q_posts.post_type = 'quilt_square' AND q_meta.meta_key = 'q_square' AND q_posts.post_date > '2019-08-13') AND i_posts.ID = q_meta.meta_value
+
+SELECT q_posts.ID as q_ID, q_posts.post_title AS q_title, q_meta.meta_key AS q_meta_key, q_meta.meta_value as q_meta_value, q_posts.guid as q_guid, q_posts.post_date as q_post_date, i_posts.guid AS i_guid, d_meta.meta_value AS d_meta_value 
+FROM wp_posts AS q_posts 
+INNER JOIN wp_postmeta AS q_meta ON ID = q_meta.post_id 
+INNER JOIN wp_posts AS i_posts 
+INNER JOIN wp_postmeta AS d_meta
+WHERE (q_posts.post_type = 'quilt_square' AND q_meta.meta_key = 'q_square' AND q_posts.post_date > '2019-08-13') 
+AND i_posts.ID = q_meta.meta_value
+AND d_meta.meta_key = 'q_description'
+
+SELECT q_posts.ID as q_ID, q_posts.post_title AS q_title, q_meta.meta_key AS q_meta_key, q_meta.meta_value as q_meta_value, q_posts.guid as q_guid, q_posts.post_date as q_post_date, i_posts.guid AS i_guid, d_meta.meta_value AS d_meta_value 
+FROM wp_posts AS q_posts 
+INNER JOIN wp_postmeta AS q_meta ON q_posts.ID = q_meta.post_id 
+INNER JOIN wp_postmeta AS d_meta ON q_posts.ID = d_meta.post_id
+INNER JOIN wp_posts AS i_posts 
+WHERE (q_posts.post_type = 'quilt_square' AND q_meta.meta_key = 'q_square' AND q_posts.post_date > '2019-08-13') 
+AND d_meta.meta_key = 'q_description'
+AND i_posts.ID = q_meta.meta_value
+
+SELECT 
+q_posts.ID as q_ID, 
+q_posts.post_title AS q_title, 
+q_meta.meta_key AS q_meta_key, 
+q_meta.meta_value as q_meta_value, 
+q_posts.guid as q_guid, 
+q_posts.post_date as q_post_date, 
+i_posts.guid AS i_guid, 
+d_meta.meta_value AS description, 
+n_meta.meta_value AS name, 
+e_meta.meta_value AS email, 
+s_meta.meta_value AS state 
+FROM wp_posts AS q_posts 
+INNER JOIN wp_postmeta AS q_meta ON q_posts.ID = q_meta.post_id 
+INNER JOIN wp_postmeta AS d_meta ON q_posts.ID = d_meta.post_id
+INNER JOIN wp_postmeta AS n_meta ON q_posts.ID = n_meta.post_id
+INNER JOIN wp_postmeta AS e_meta ON q_posts.ID = e_meta.post_id
+INNER JOIN wp_postmeta AS s_meta ON q_posts.ID = s_meta.post_id
+INNER JOIN wp_posts AS i_posts 
+WHERE (q_posts.post_type = 'quilt_square' AND q_meta.meta_key = 'q_square' AND q_posts.post_date > '2019-08-13') 
+AND d_meta.meta_key = 'q_description'
+AND n_meta.meta_key = 'q_author'
+AND e_meta.meta_key = 'q_email'
+AND s_meta.meta_key = 'your_state'
+AND i_posts.ID = q_meta.meta_value
+
+SELECT 
+q_posts.ID as q_ID, 
+q_posts.post_title AS q_title, 
+q_meta.meta_key AS q_meta_key, 
+q_meta.meta_value as q_meta_value, 
+q_posts.guid as q_guid, 
+q_posts.post_date as q_post_date, 
+i_posts.guid AS i_guid, 
+d_meta.meta_value AS description, 
+n_meta.meta_value AS name, 
+e_meta.meta_value AS email, 
+s_meta.meta_value AS state 
+FROM wp_posts AS q_posts 
+INNER JOIN wp_postmeta AS q_meta ON q_posts.ID = q_meta.post_id 
+INNER JOIN wp_postmeta AS d_meta ON q_posts.ID = d_meta.post_id
+INNER JOIN wp_postmeta AS n_meta ON q_posts.ID = n_meta.post_id
+INNER JOIN wp_postmeta AS e_meta ON q_posts.ID = e_meta.post_id
+INNER JOIN wp_postmeta AS s_meta ON q_posts.ID = s_meta.post_id
+INNER JOIN wp_posts AS i_posts 
+WHERE (q_posts.post_type = 'quilt_square' and q_posts.post_status = 'publish' AND q_meta.meta_key = 'q_square' AND q_posts.post_date > '2019-08-13') 
+AND d_meta.meta_key = 'q_description'
+AND n_meta.meta_key = 'q_author'
+AND e_meta.meta_key = 'q_email'
+AND s_meta.meta_key = 'your_state'
+AND i_posts.ID = q_meta.meta_value
